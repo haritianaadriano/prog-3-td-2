@@ -1,3 +1,5 @@
+import app.foot.controller.rest.Player;
+import app.foot.controller.rest.PlayerScorer;
 import app.foot.controller.validator.GoalValidator;
 import org.junit.jupiter.api.Test;
 
@@ -28,5 +30,17 @@ public class GoalValidatorTest {
     @Test
     void when_score_time_less_than_0_throws_exception() {
 
+    }
+
+    public static app.foot.controller.rest.PlayerScorer scorer_ok(){
+        return PlayerScorer.builder()
+                .isOG(true)
+                .scoreTime(15)
+                .player(Player.builder()
+                        .id(1)
+                        .isGuardian(false)
+                        .name("rakoto")
+                        .build())
+                .build();
     }
 }
