@@ -100,4 +100,11 @@ public class PlayerMapperTest {
                 .match(matchEntity1)
                 .build(), actual);
     }
+
+    @Test
+    void player_to_entity_ok(){
+        PlayerEntity except = entityRakoto();
+        PlayerEntity actual = subject.toEntity(playerModelRakoto(entityRakoto()));
+        assertEquals(except, actual);
+    }
 }
