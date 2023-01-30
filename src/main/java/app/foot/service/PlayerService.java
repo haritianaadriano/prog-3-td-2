@@ -1,5 +1,6 @@
 package app.foot.service;
 
+import app.foot.controller.rest.CreatePlayer;
 import app.foot.model.Player;
 import app.foot.repository.PlayerRepository;
 import app.foot.repository.mapper.PlayerMapper;
@@ -19,5 +20,9 @@ public class PlayerService {
         return repository.findAll().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public List<Player> savePlayers(List<CreatePlayer> toSave){
+
     }
 }
