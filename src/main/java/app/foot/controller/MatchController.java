@@ -2,6 +2,8 @@ package app.foot.controller;
 
 import app.foot.controller.rest.Match;
 import app.foot.controller.rest.PlayerScorer;
+import app.foot.controller.rest.Team;
+import app.foot.controller.rest.TeamMatch;
 import app.foot.controller.rest.mapper.MatchRestMapper;
 import app.foot.controller.rest.mapper.PlayerScorerRestMapper;
 import app.foot.controller.validator.GoalValidator;
@@ -29,6 +31,32 @@ public class MatchController {
     return service.getMatches().stream()
         .map(mapper::toRest)
         .toList();
+  }
+
+  @GetMapping("/matches/{matchId}")
+  public Match getMatch(@PathVariable(name = "matchId") int idMatch){
+    app.foot.model.Match match = service.getMatchById(idMatch);
+    return Match.builder()
+            .id(match.getId())
+            .teamB(TeamMatch.builder()
+                    .score(match.getTeamB().getScore())
+                    .scorers(match.getTeamB().getScorers().stream().map(scorerMapper::toRest).toList())
+                    .team(Team.builder()
+                            .id(match.getTeamB().getTeam().getId())
+                            .name(match.getTeamB().getTeam().getName())
+                            .build())
+                    .build())
+            .teamA(TeamMatch.builder()
+                    .score(match.getTeamA().getScore())
+                    .scorers(match.getTeamA().getScorers().stream().map(scorerMapper::toRest).toList())
+                    .team(Team.builder()
+                            .id(match.getTeamA().getTeam().getId())
+                            .name(match.getTeamA().getTeam().getName())
+                            .build())
+                    .build())
+            .stadium(match.getStadium())
+            .datetime(match.getDatetime())
+            .build();
   }
 
   @PostMapping("/matches/{matchId}/goals")
