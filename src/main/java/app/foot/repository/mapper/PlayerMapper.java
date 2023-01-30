@@ -1,11 +1,13 @@
 package app.foot.repository.mapper;
 
+import app.foot.controller.rest.CreatePlayer;
 import app.foot.model.Player;
 import app.foot.model.PlayerScorer;
 import app.foot.repository.MatchRepository;
 import app.foot.repository.PlayerRepository;
 import app.foot.repository.entity.PlayerEntity;
 import app.foot.repository.entity.PlayerScoreEntity;
+import app.foot.repository.entity.TeamEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,15 @@ public class PlayerMapper {
   private final MatchRepository matchRepository;
   private final PlayerRepository playerRepository;
 
+  public PlayerEntity toDomain(CreatePlayer rest){
+    return PlayerEntity.builder()
+            .name(rest.getName())
+            .guardian(rest.getIsGuardian())
+            .team(TeamEntity.builder()
+                    .name(rest.getName())
+                    .build())
+            .build();
+  }
 
   public Player toDomain(PlayerEntity entity) {
     return Player.builder()

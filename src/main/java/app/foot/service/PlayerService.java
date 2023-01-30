@@ -23,6 +23,10 @@ public class PlayerService {
     }
 
     public List<Player> savePlayers(List<CreatePlayer> toSave){
-
+        return repository.saveAll(toSave.stream()
+                .map(mapper::toDomain)
+                .toList()).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }
