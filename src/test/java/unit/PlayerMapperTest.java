@@ -104,6 +104,7 @@ public class PlayerMapperTest {
     @Test
     void player_to_entity_ok(){
         PlayerEntity except = entityRakoto();
+        when(teamRepositoryMock.findByName("Barea")).thenReturn(teamBarea());
         PlayerEntity actual = subject.toEntity(playerModelRakoto(entityRakoto()));
         assertEquals(except, actual);
     }
