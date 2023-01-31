@@ -34,5 +34,10 @@ public class PlayerController {
 
     //TODO: add PUT /players where you can modify the name and the guardian status of a player
     // Don't forget to add integration tests for this
-    @PutMapping("/players/{IdPlayer}")
+    @PutMapping("/players")
+    public List<Player> modiyPlayers(@RequestBody Player toUpdate){
+        return service.modifyPlayers(mapper.toDomain(toUpdate)).stream()
+                .map(mapper::toRest)
+                .toList();
+    }
 }
