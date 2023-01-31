@@ -39,6 +39,20 @@ class MatchIntegrationTest {
         assertEquals(expectedMatch2(), actual);
     }
 
+    @Test
+    void read_match_by_id_ko() throws Exception{
+        MockHttpServletResponse response = mockMvc.perform(get("/matches/4")
+                .contentType("application/json"))
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse();
+        RuntimeException actual = objectMapper.readValue(
+                response.getContentAsString(), RuntimeException.class);
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertEquals("Match#4 not found. ", actual.getMessage());
+    }
+
     private static Match expectedMatch2() {
         return Match.builder()
                 .id(2)
