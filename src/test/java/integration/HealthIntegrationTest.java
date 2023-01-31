@@ -28,6 +28,8 @@ public class HealthIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
+        String actual = response.getContentAsString();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals("pong", actual);
     }
 }

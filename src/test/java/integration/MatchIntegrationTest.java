@@ -44,15 +44,16 @@ class MatchIntegrationTest {
                 .build();
         MockHttpServletResponse response = mockMvc
                 .perform(
-                         post("/matches/{matchId}/goals")
+                         post("/matches/3/goals")
                         .content(objectMapper.writeValueAsString(List.of(toCreate)))
                         .contentType("application/json")
                 .accept("application/json"))
+                .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
         List<PlayerScorer> actual = convertFromHttpResponse(response);
         assertEquals(1, actual.size());
-        assertEquals(toCreate, actual.get(0).toBuilder().id(null).build());
+        assertEquals(toCreate, actual.get(0));
     }
 
     private List<PlayerScorer> convertFromHttpResponse(MockHttpServletResponse response)
