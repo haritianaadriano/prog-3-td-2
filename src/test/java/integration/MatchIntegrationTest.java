@@ -2,7 +2,9 @@ package integration;
 
 import app.foot.FootApi;
 import app.foot.controller.rest.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,11 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FootApi.class)
@@ -25,6 +29,40 @@ class MatchIntegrationTest {
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper()
             .findAndRegisterModules();  //Allow 'java.time.Instant' mapping
+
+    @Test
+    void create_score_ok() throws Exception{
+        PlayerScorer toCreate = PlayerScorer.builder()
+                .scoreTime(75)
+                .isOG(true)
+                .player(Player.builder()
+                        .id(1)
+                        .name("J1")
+                        .isGuardian(false)
+                        .teamName("E1")
+                        .build())
+                .build();
+        MockHttpServletResponse response = mockMvc
+                .perform(
+                         post("/matches/{matchId}/goals")
+                        .content(objectMapper.writeValueAsString(List.of(toCreate)))
+                        .contentType("application/json")
+                .accept("application/json"))
+                .andReturn()
+                .getResponse();
+        List<PlayerScorer> actual = convertFromHttpResponse(response);
+        assertEquals(1, actual.size());
+        assertEquals(toCreate, actual.get(0).toBuilder().id(null).build());
+    }
+
+    private List<PlayerScorer> convertFromHttpResponse(MockHttpServletResponse response)
+            throws JsonProcessingException, UnsupportedEncodingException {
+        CollectionType playerScorerType = objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, Player.class);
+        return objectMapper.readValue(
+                response.getContentAsString(),
+                playerScorerType);
+    }
 
     @Test
     void read_match_by_id_ok() throws Exception {
