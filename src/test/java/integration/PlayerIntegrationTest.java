@@ -20,8 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest(classes = FootApi.class)
 @AutoConfigureMockMvc
@@ -92,6 +91,26 @@ class PlayerIntegrationTest {
         assertEquals(toCreate, actual.get(0).toBuilder().id(null).build());
     }
 
+    @Test
+    void modify_players_ok() throws Exception{
+        Player toUpdate = Player.builder()
+                .teamName("E1")
+                .isGuardian(false)
+                .name("J3")
+                .id(3)
+                .build();
+        MockHttpServletResponse response = mockMvc.perform(put("/palyers")
+                        .content(objectMapper.writeValueAsString(List.of(toUpdate)))
+                        .contentType("application/json")
+                        .accept("application/json"))
+                .andReturn()
+                .getResponse();
+        List<Player> actual = convertFromHttpResponse(response);
+
+        assertEquals(1, actual.size());
+        assertEquals(toUpdate, actual.get(0).toBuilder().build());
+    }
+
     private List<Player> convertFromHttpResponse(MockHttpServletResponse response)
             throws JsonProcessingException, UnsupportedEncodingException {
         CollectionType playerListType = objectMapper.getTypeFactory()
@@ -100,4 +119,5 @@ class PlayerIntegrationTest {
                 response.getContentAsString(),
                 playerListType);
     }
+
 }
