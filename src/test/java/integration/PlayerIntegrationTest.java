@@ -5,12 +5,14 @@ import app.foot.controller.rest.Player;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.UnsupportedEncodingException;
@@ -33,6 +35,7 @@ class PlayerIntegrationTest {
                 .id(1)
                 .name("J1")
                 .isGuardian(false)
+                .teamName("E1")
                 .build();
     }
 
@@ -41,6 +44,7 @@ class PlayerIntegrationTest {
                 .id(2)
                 .name("J2")
                 .isGuardian(false)
+                .teamName("E1")
                 .build();
     }
 
@@ -49,6 +53,7 @@ class PlayerIntegrationTest {
                 .id(3)
                 .name("J3")
                 .isGuardian(false)
+                .teamName("E2")
                 .build();
     }
 
@@ -61,11 +66,10 @@ class PlayerIntegrationTest {
         List<Player> actual = convertFromHttpResponse(response);
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(9, actual.size());
-//        assertTrue(actual.containsAll(List.of(
-//                player1(),
-//                player2(),
-//                player3())));
+        assertEquals(10, actual.size());
+        assertTrue(actual.containsAll(List.of(
+                player2(),
+                player3())));
     }
 
     @Test
