@@ -51,9 +51,12 @@ class MatchIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
-        List<PlayerScorer> actual = convertFromHttpResponse(response);
-        assertEquals(1, actual.size());
-        assertEquals(toCreate, actual.get(0).toBuilder().build());
+
+        Match actual = objectMapper.readValue(
+                response.getContentAsString(), Match.class);
+
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+            assertEquals(expectedMatch3(), actual);
     }
 
     private List<PlayerScorer> convertFromHttpResponse(MockHttpServletResponse response)
@@ -90,6 +93,39 @@ class MatchIntegrationTest {
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("Match#4 not found. ", actual.getMessage());
+    }
+
+    private static Match expectedMatch3(){
+        return Match.builder()
+                .id(3)
+                .teamA(TeamMatch.builder()
+                        .team(Team.builder()
+                                .id(1)
+                                .name("E1")
+                                .build())
+                        .scorers(List.of())
+                        .score(0)
+                        .build())
+                .teamB(TeamMatch.builder()
+                        .team(Team.builder()
+                                .id(3)
+                                .name("E3")
+                                .build())
+                        .scorers(List.of(PlayerScorer.builder()
+                                        .player(Player.builder()
+                                                .id(1)
+                                                .name("J1")
+                                                .isGuardian(false)
+                                                .teamName("E1")
+                                                .build())
+                                        .isOG(true)
+                                        .scoreTime(75)
+                                        .build()))
+                        .score(1)
+                        .build())
+                .datetime(Instant.parse("2023-01-01T18:00:00Z"))
+                .stadium("S3")
+                .build();
     }
 
     private static Match expectedMatch2() {
