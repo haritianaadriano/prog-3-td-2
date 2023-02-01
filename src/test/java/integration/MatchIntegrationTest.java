@@ -53,7 +53,7 @@ class MatchIntegrationTest {
                 .getResponse();
         List<PlayerScorer> actual = convertFromHttpResponse(response);
         assertEquals(1, actual.size());
-        assertEquals(toCreate, actual.get(0));
+        assertEquals(toCreate, actual.get(0).toBuilder().build());
     }
 
     private List<PlayerScorer> convertFromHttpResponse(MockHttpServletResponse response)
@@ -138,6 +138,7 @@ class MatchIntegrationTest {
         return Player.builder()
                 .id(6)
                 .name("J6")
+                .teamName("E3")
                 .isGuardian(false)
                 .build();
     }
@@ -146,6 +147,7 @@ class MatchIntegrationTest {
         return Player.builder()
                 .id(3)
                 .name("J3")
+                .teamName("E2")
                 .isGuardian(false)
                 .build();
     }
