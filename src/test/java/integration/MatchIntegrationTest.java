@@ -145,8 +145,13 @@ class MatchIntegrationTest {
                                 .name("E2")
                                 .build())
                         .scorers(List.of(
-
-                        ))
+                                j3_scorer(),
+                                j4_scorer()
+                            ))
+                        .team(Team.builder()
+                                .name("E2")
+                                .id(2)
+                                .build())
                         .build())
                 .build();
     }
