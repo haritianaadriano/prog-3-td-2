@@ -131,10 +131,23 @@ class MatchIntegrationTest {
                                 j1_scorer(10),
                                 j1_scorer(20),
                                 j1_scorer(30),
-                                j2_scorer(),
+                                j2_scorer()
+                        ))
+                        .team(Team.builder()
+                                .name("E1")
+                                .id(1)
+                                .build())
+                    .build())
+                .teamB(TeamMatch.builder()
+                        .score(2)
+                        .team(Team.builder()
+                                .id(2)
+                                .name("E2")
+                                .build())
+                        .scorers(List.of(
 
                         ))
-                    .build())
+                        .build())
                 .build();
     }
 
@@ -161,6 +174,19 @@ class MatchIntegrationTest {
                         .teamName("E1")
                         .name("J2")
                         .isGuardian(false)
+                        .build())
+                .build();
+    }
+
+    public static PlayerScorer j3_scorer(){
+        return PlayerScorer.builder()
+                .isOG(false)
+                .scoreTime(50)
+                .player(Player.builder()
+                        .isGuardian(false)
+                        .name("J3")
+                        .teamName("E2")
+                        .id(3)
                         .build())
                 .build();
     }
