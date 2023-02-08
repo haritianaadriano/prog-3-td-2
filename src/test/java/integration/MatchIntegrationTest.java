@@ -191,6 +191,19 @@ class MatchIntegrationTest {
                 .build();
     }
 
+    public static PlayerScorer j4_scorer(){
+        return PlayerScorer.builder()
+                .player(Player.builder()
+                        .id(4)
+                        .teamName("E2")
+                        .name("J4")
+                        .isGuardian(false)
+                        .build())
+                .scoreTime(60)
+                .isOG(true)
+                .build();
+    }
+
     private static Match expectedMatch3(){
         return Match.builder()
                 .id(3)
