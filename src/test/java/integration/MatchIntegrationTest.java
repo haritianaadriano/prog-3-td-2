@@ -124,42 +124,29 @@ class MatchIntegrationTest {
         return Match.builder()
                 .id(1)
                 .stadium("S1")
-                .datetime(Instant.parse("2023-01-01 10:00:00"))
+                .datetime(Instant.parse("2023-01-01T10:00:00Z"))
                 .teamA(TeamMatch.builder()
                         .score(4)
                         .scorers(List.of(
-                                PlayerScorer.builder()
-                                        .scoreTime(10)
-                                        .isOG(false)
-                                        .player(Player.builder()
-                                                .teamName("E1")
-                                                .isGuardian(false)
-                                                .name("J1")
-                                                .teamName("E1")
-                                                .id(1)
-                                                .build())
-                                        .build(),
-                                PlayerScorer.builder()
-                                        .isOG(false)
-                                        .scoreTime(20)
-                                        .player(Player.builder()
-                                                .id(1)
-                                                .teamName("E1")
-                                                .name("J1")
-                                                .isGuardian(false)
-                                                .build())
-                                        .build(),
-                                PlayerScorer.builder()
-                                        .isOG(false)
-                                        .scoreTime(30)
-                                        .player(Player.builder()
-                                                .isGuardian(false)
-                                                .name("J1")
-                                                .teamName("E1")
-                                                .id(1)
-                                                .build())
-                                        .build()
-                                ))
+                                j1_scorer(10),
+                                j1_scorer(20),
+                                j1_scorer(30),
+
+                        ))
+                    .build())
+                .build();
+    }
+
+    public static PlayerScorer j1_scorer(int scoreTime){
+        return PlayerScorer.builder()
+                .scoreTime(scoreTime)
+                .isOG(false)
+                .player(Player.builder()
+                        .teamName("E1")
+                        .isGuardian(false)
+                        .name("J1")
+                        .teamName("E1")
+                        .id(1)
                         .build())
                 .build();
     }
