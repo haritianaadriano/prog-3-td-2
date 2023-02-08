@@ -131,6 +131,7 @@ class MatchIntegrationTest {
                                 j1_scorer(10),
                                 j1_scorer(20),
                                 j1_scorer(30),
+                                j2_scorer(),
 
                         ))
                     .build())
@@ -147,6 +148,19 @@ class MatchIntegrationTest {
                         .name("J1")
                         .teamName("E1")
                         .id(1)
+                        .build())
+                .build();
+    }
+
+    public static PlayerScorer j2_scorer(){
+        return PlayerScorer.builder()
+                .scoreTime(40)
+                .isOG(true)
+                .player(Player.builder()
+                        .id(2)
+                        .teamName("E1")
+                        .name("J2")
+                        .isGuardian(false)
                         .build())
                 .build();
     }
