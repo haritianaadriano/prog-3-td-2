@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +30,21 @@ class MatchIntegrationTest {
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper()
             .findAndRegisterModules();  //Allow 'java.time.Instant' mapping
+
+    @Test
+    void read_matches_ok() throws Exception {
+        MockHttpServletResponse response = mockMvc.perform(get("/matches"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+        List<Match> actual = convertFromHttpResponse_match(response);
+
+        assertEquals(3, actual.size());
+        assertTrue(actual.contains(expectedMatch2()));
+        //TODO: add these checks and its values
+        assertTrue(actual.contains(expectedMatch1()));
+        assertTrue(actual.contains(expectedMatch3()));
+    }
 
     @Test
     void create_score_ok() throws Exception{
@@ -57,6 +73,15 @@ class MatchIntegrationTest {
 
             assertEquals(HttpStatus.OK.value(), response.getStatus());
             assertEquals(expectedMatch3(), actual);
+    }
+
+    private List<Match> convertFromHttpResponse_match(MockHttpServletResponse response)
+            throws JsonProcessingException, UnsupportedEncodingException {
+        CollectionType match = objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, Match.class);
+        return objectMapper.readValue(
+                response.getContentAsString(),
+                match);
     }
 
     private List<PlayerScorer> convertFromHttpResponse(MockHttpServletResponse response)
@@ -93,6 +118,50 @@ class MatchIntegrationTest {
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("Match#4 not found. ", actual.getMessage());
+    }
+
+    private static Match expectedMatch1(){
+        return Match.builder()
+                .id(1)
+                .stadium("S1")
+                .datetime(Instant.parse("2023-01-01 10:00:00"))
+                .teamA(TeamMatch.builder()
+                        .score(4)
+                        .scorers(List.of(
+                                PlayerScorer.builder()
+                                        .scoreTime(10)
+                                        .isOG(false)
+                                        .player(Player.builder()
+                                                .teamName("E1")
+                                                .isGuardian(false)
+                                                .name("J1")
+                                                .teamName("E1")
+                                                .id(1)
+                                                .build())
+                                        .build(),
+                                PlayerScorer.builder()
+                                        .isOG(false)
+                                        .scoreTime(20)
+                                        .player(Player.builder()
+                                                .id(1)
+                                                .teamName("E1")
+                                                .name("J1")
+                                                .isGuardian(false)
+                                                .build())
+                                        .build(),
+                                PlayerScorer.builder()
+                                        .isOG(false)
+                                        .scoreTime(30)
+                                        .player(Player.builder()
+                                                .isGuardian(false)
+                                                .name("J1")
+                                                .teamName("E1")
+                                                .id(1)
+                                                .build())
+                                        .build()
+                                ))
+                        .build())
+                .build();
     }
 
     private static Match expectedMatch3(){
