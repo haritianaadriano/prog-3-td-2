@@ -42,6 +42,8 @@ class MatchIntegrationTest {
         assertEquals(3, actual.size());
         assertTrue(actual.contains(expectedMatch2()));
         //TODO: add these checks and its values
+        System.out.println(actual.get(2));
+        System.out.println(expectedMatch3());
         assertTrue(actual.contains(expectedMatch1()));
         assertTrue(actual.contains(expectedMatch3()));
     }
@@ -128,10 +130,10 @@ class MatchIntegrationTest {
                 .teamA(TeamMatch.builder()
                         .score(4)
                         .scorers(List.of(
-                                j1_scorer(10),
-                                j1_scorer(20),
                                 j1_scorer(30),
-                                j2_scorer()
+                                j1_scorer(20),
+                                j1_scorer(10),
+                                j4_scorer()
                         ))
                         .team(Team.builder()
                                 .name("E1")
@@ -145,8 +147,8 @@ class MatchIntegrationTest {
                                 .name("E2")
                                 .build())
                         .scorers(List.of(
-                                j3_scorer(),
-                                j4_scorer()
+                                j2_scorer(),
+                                j3_scorer()
                             ))
                         .team(Team.builder()
                                 .name("E2")
